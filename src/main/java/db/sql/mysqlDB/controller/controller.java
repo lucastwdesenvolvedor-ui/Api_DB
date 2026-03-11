@@ -1,0 +1,93 @@
+package db.sql.mysqlDB.controller;
+
+import db.sql.mysqlDB.Documentacao.doc;
+import db.sql.mysqlDB.usuario.Usuario;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+@RestController
+
+public class controller {
+    String url = "jdbc:mysql://sql306.infinityfree.com:3306/if0_41047229_conectar";
+    String usuario = "if0_41047229";
+    String pass = "qzOFJ8bDzEw4D2";
+    @RequestMapping("/")
+    public ArrayList<doc> bemVindo() {
+        doc post = new doc("/post?" , "Requer parâmetros: &nome=, &email=, &senha=");
+        ArrayList<doc> dc = new ArrayList<>();
+        dc.add(new doc("Bem Vindo" , "/"));
+        dc.add(new doc("Pegar dados do DB" , "/get"));
+        dc.add(new doc("Inserir dados no DB" , post));
+        return dc;
+    }
+    public Connection Conn(String url, String user, String password) {
+        Connection conn = null;
+        try {
+            conn = java.sql.DriverManager.getConnection(url, user, password);
+            return conn;
+        } catch (java.sql.SQLException e) {
+            System.out.println("Erro ao conectar: " + e.getMessage());
+            return conn;
+        }
+
+    }
+
+    @GetMapping("/get")
+    public ArrayList<Usuario> get() throws SQLException {
+        ArrayList<Usuario> u = new ArrayList<>();
+
+        Connection conn = Conn(url, usuario, pass);
+
+        if (conn == null) {
+            System.out.println("Conexão falhou");
+        }
+
+        String sql = "SELECT * FROM usuarios";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet res = ps.executeQuery();) {
+
+            while (res.next()) {
+                Usuario user = new Usuario(res.getInt("id"), res.getString("nome_usuario"), res.getString("email"), res.getString("senha"));
+                u.add(user);
+            }
+            return u;
+        } catch (SQLException e) {
+            System.out.println("Erro ao executar consulta: " + e.getMessage());
+            return u;
+        }
+
+    }
+    @GetMapping("post")
+    public ArrayList<String> post(@RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
+
+        String sql = "INSERT INTO usuarios (nome_usuario, email, senha, logado) VALUES (?, ?, ?,?)";
+        try (Connection conn = Conn(url, usuario, pass);
+             PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+            ps.setString(1, nome);
+            ps.setString(2, email);
+            ps.setString(3, senha);
+            ps.setString(4, log);
+            ps.executeUpdate();
+            ArrayList<String> resposta = new ArrayList<>();
+            resposta.add("Usuário adicionado com sucesso!");
+            return resposta;
+        }
+        catch (Exception e){
+            ArrayList<String> resposta = new ArrayList<>();
+            resposta.add("Erro ao adicionar usuário: " + e.getMessage());
+            return resposta;
+        }
+
+    }
+
+}
