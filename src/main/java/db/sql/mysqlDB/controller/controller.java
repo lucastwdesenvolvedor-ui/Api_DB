@@ -16,9 +16,14 @@ import java.util.ArrayList;
 @RestController
 
 public class controller {
-    String url = "jdbc:mysql://root:CBslslvZNPldxCdtgJcPsalUzmExhaBI@yamanote.proxy.rlwy.net:40363/railway";
-    String usuario = "if0_41047229";
-    String pass = "qzOFJ8bDzEw4D2";
+    String host = System.getenv("MYSQLHOST");
+    String port = System.getenv("MYSQLPORT");
+    String db = System.getenv("MYSQLDATABASE");
+    String user = System.getenv("MYSQLUSER");
+    String pass = System.getenv("MYSQLPASSWORD");
+
+    String url = "jdbc:mysql://" + host + ":" + port + "/" + db + "?useSSL=false&serverTimezone=UTC";
+
     @RequestMapping("/")
     public ArrayList<doc> bemVindo() {
         doc post = new doc("/post?" , "Requer parâmetros: &nome=, &email=, &senha=");
@@ -44,7 +49,7 @@ public class controller {
     public ArrayList<Usuario> get() throws SQLException {
         ArrayList<Usuario> u = new ArrayList<>();
 
-        Connection conn = Conn(url, usuario, pass);
+        Connection conn = Conn(url, user, pass);
 
         if (conn == null) {
             System.out.println("Conexão falhou");
@@ -70,7 +75,7 @@ public class controller {
     public ArrayList<String> post(@RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
 
         String sql = "INSERT INTO usuarios (nome_usuario, email, senha, logado) VALUES (?, ?, ?,?)";
-        try (Connection conn = Conn(url, usuario, pass);
+        try (Connection conn = Conn(url, user, pass);
              PreparedStatement ps = conn.prepareStatement(sql)
         ) {
             ps.setString(1, nome);
