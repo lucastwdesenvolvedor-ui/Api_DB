@@ -16,7 +16,7 @@ import java.util.ArrayList;
 @RestController
 
 public class controller {
-    String url = "jdbc:mysql://sql306.infinityfree.com:3306/if0_41047229_conectar";
+    String url = "jdbc:mysql://root:CBslslvZNPldxCdtgJcPsalUzmExhaBI@yamanote.proxy.rlwy.net:40363/railway";
     String usuario = "if0_41047229";
     String pass = "qzOFJ8bDzEw4D2";
     @RequestMapping("/")
