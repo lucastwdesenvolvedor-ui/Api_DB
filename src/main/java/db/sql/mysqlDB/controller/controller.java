@@ -58,15 +58,14 @@ public class controller {
         String sql = "SELECT * FROM usuarios";
 
         try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet res = ps.executeQuery();) {
+             ResultSet res = ps.executeQuery()) {
 
             while (res.next()) {
-                Usuario user = new Usuario(res.getInt("id"), res.getString("nome_usuario"), res.getString("email"), res.getString("senha"));
+                Usuario user = new Usuario(res.getInt("id"), res.getString("nome"), res.getString("email"), res.getString("senha"));
                 u.add(user);
             }
             return u;
         } catch (SQLException e) {
-            System.out.println("Erro ao executar consulta: " + e.getMessage());
             return u;
         }
 
@@ -74,7 +73,9 @@ public class controller {
     @GetMapping("post")
     public ArrayList<String> post(@RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
 if(!(log.equals("1") || log.equals("0"))){
-
+    ArrayList<String> err = new ArrayList<>() ;
+    err.add("erro");
+    return err;
 }
         String sql = "INSERT INTO usuarios (nome, email, pass, logado) VALUES (?, ?, ?,?)";
         try (Connection conn = Conn(url, user, pass);
@@ -86,7 +87,7 @@ if(!(log.equals("1") || log.equals("0"))){
             ps.setString(4, log);
             ps.executeUpdate();
             ArrayList<String> resposta = new ArrayList<>();
-            resposta.add("true");
+            resposta.add("True");
             return resposta;
         }
         catch (Exception e){
