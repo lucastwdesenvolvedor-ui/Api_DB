@@ -52,7 +52,7 @@ public class controller {
         ArrayList<Usuario> u = new ArrayList<>();
 
         Connection conn = Conn(url, user, pass);
-
+        System.out.println("DATABASE: " + conn.getCatalog());
         if (conn == null) {
             System.out.println("Conexão falhou");
         }
