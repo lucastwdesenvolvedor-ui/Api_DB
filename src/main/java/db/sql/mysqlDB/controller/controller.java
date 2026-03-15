@@ -86,7 +86,7 @@ if(!(log.equals("1") || log.equals("0"))){
             ps.setString(4, log);
             ps.executeUpdate();
             ArrayList<String> resposta = new ArrayList<>();
-            resposta.add("True");
+            resposta.add("true");
             return resposta;
         }
         catch (Exception e){
