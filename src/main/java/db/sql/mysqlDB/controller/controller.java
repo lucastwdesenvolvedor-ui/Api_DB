@@ -37,6 +37,7 @@ public class controller {
         Connection conn = null;
         try {
             conn = java.sql.DriverManager.getConnection(url, user, password);
+            System.out.println("DATABASE: " + conn.getCatalog());
             return conn;
         } catch (java.sql.SQLException e) {
             System.out.println("Erro ao conectar: " + e.getMessage());
@@ -47,6 +48,7 @@ public class controller {
 
     @GetMapping("/get")
     public ArrayList<Usuario> get() throws SQLException {
+
         ArrayList<Usuario> u = new ArrayList<>();
 
         Connection conn = Conn(url, user, pass);
@@ -58,7 +60,9 @@ public class controller {
         String sql = "SELECT * FROM usuarios";
 
         try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet res = ps.executeQuery()) {
+             ResultSet res = ps.executeQuery())
+        {
+
 
             while (res.next()) {
                 Usuario user = new Usuario(res.getInt("id"), res.getString("nome"), res.getString("email"), res.getString("senha"));
