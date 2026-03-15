@@ -73,8 +73,10 @@ public class controller {
     }
     @GetMapping("post")
     public ArrayList<String> post(@RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
+if(!(log.equals("1") || log.equals("0"))){
 
-        String sql = "INSERT INTO usuarios (nome, email, senha, logado) VALUES (?, ?, ?,?)";
+}
+        String sql = "INSERT INTO usuarios (nome, email, pass, logado) VALUES (?, ?, ?,?)";
         try (Connection conn = Conn(url, user, pass);
              PreparedStatement ps = conn.prepareStatement(sql)
         ) {
