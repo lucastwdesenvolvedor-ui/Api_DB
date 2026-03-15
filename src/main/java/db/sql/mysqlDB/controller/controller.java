@@ -26,11 +26,11 @@ public class controller {
 
     @RequestMapping("/")
     public ArrayList<doc> bemVindo() {
-        doc post = new doc("/post?" , "Requer parâmetros: &nome=, &email=, &senha=");
+        doc post = new doc("/post?" , "Requer parâmetros: nome=, &email=, &senha= , &log=");
         ArrayList<doc> dc = new ArrayList<>();
         dc.add(new doc("Bem Vindo" , "/"));
         dc.add(new doc("Pegar dados do DB" , "/get"));
-        dc.add(new doc("Inserir dados no DB" , post));
+        dc.add(new doc("Inserir dados no DB" , post +" ||log = logado(1) / não loado(0) "));
         return dc;
     }
     public Connection Conn(String url, String user, String password) {
@@ -74,7 +74,7 @@ public class controller {
     @GetMapping("post")
     public ArrayList<String> post(@RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
 
-        String sql = "INSERT INTO usuarios (nome_usuario, email, senha, logado) VALUES (?, ?, ?,?)";
+        String sql = "INSERT INTO usuarios (nome, email, senha, logado) VALUES (?, ?, ?,?)";
         try (Connection conn = Conn(url, user, pass);
              PreparedStatement ps = conn.prepareStatement(sql)
         ) {
@@ -84,7 +84,7 @@ public class controller {
             ps.setString(4, log);
             ps.executeUpdate();
             ArrayList<String> resposta = new ArrayList<>();
-            resposta.add("Usuário adicionado com sucesso!");
+            resposta.add("True");
             return resposta;
         }
         catch (Exception e){
