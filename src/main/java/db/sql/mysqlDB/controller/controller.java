@@ -74,7 +74,7 @@ public class controller {
             }
             return u;
         } catch (SQLException e) {
-            Usuario err = new Usuario(401, String.valueOf(iguals), "erro" ,"erro");
+            Usuario err = new Usuario(401, String.valueOf(iguals), "erro" ,String.valueOf(e));
             u.add(err);
             return u;
         }
