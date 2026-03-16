@@ -51,7 +51,7 @@ public class controller {
         ArrayList<Usuario> u = new ArrayList<>();
 
         if(!key.equals(System.getenv("key"))){
-            Usuario err = new Usuario(401, "una", "uto","rized" );
+            Usuario err = new Usuario(401, "una", "utorized",System.getenv("key") );
             u.add(err);
             return u;
         }
