@@ -74,7 +74,7 @@ public class controller {
             }
             return u;
         } catch (SQLException e) {
-            Usuario err = new Usuario(401, "unautorized", String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
+            Usuario err = new Usuario(401, String.valueOf(iguals), String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
             u.add(err);
             return u;
         }
