@@ -69,7 +69,7 @@ public class controller {
              ResultSet res = ps.executeQuery())
         {
             while (res.next()) {
-                Usuario user = new Usuario(res.getInt("id"), res.getString("nome"), res.getString("email"), res.getString("senha"));
+                Usuario user = new Usuario(res.getInt("id"), res.getString("nome"), res.getString("email"), res.getString("pass"));
                 u.add(user);
             }
             return u;
