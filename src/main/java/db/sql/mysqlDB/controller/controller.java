@@ -47,6 +47,8 @@ public class controller {
 
     @GetMapping("/get")
     public ArrayList<Usuario> get(@RequestParam String key) throws SQLException {
+        System.out.println("KEY RECEBIDA: " + key);
+        System.out.println("KEY ENV: " + System.getenv("key"));
         ArrayList<Usuario> u = new ArrayList<>();
 
         if(!key.equals(System.getenv("key"))){
