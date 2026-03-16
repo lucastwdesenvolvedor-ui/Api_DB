@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 @RestController
 public class controller {
+    String API_KEY = System.getenv("key");
     String host = System.getenv("MYSQLHOST");
     String port = System.getenv("MYSQLPORT");
     String db = System.getenv("MYSQLDATABASE");
@@ -46,12 +47,10 @@ public class controller {
 
     @GetMapping("/get")
     public ArrayList<Usuario> get(@RequestParam String key) throws SQLException {
-        System.out.println("KEY RECEBIDA: " + key);
-        System.out.println("KEY ENV: " + System.getenv("key"));
         ArrayList<Usuario> u = new ArrayList<>();
 
-        if(!key.equals(System.getenv("key"))){
-            Usuario err = new Usuario(401, "una", "utorized",System.getenv("key") );
+        if(!key.equals(API_KEY)){
+            Usuario err = new Usuario(401, "unautorized", key ,API_KEY );
             u.add(err);
             return u;
         }
@@ -75,7 +74,7 @@ public class controller {
             }
             return u;
         } catch (SQLException e) {
-            Usuario err = new Usuario(401, "una", "utorized",System.getenv("key") );
+            Usuario err = new Usuario(401, "unautorized", key ,API_KEY );
             u.add(err);
             return u;
         }
@@ -83,9 +82,12 @@ public class controller {
     }
     @GetMapping("/post")
     public ArrayList<String> post(@RequestParam String key, @RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
-        if(!key.equals(System.getenv("key"))){
+
+        if(!key.equals(API_KEY)){
             ArrayList<String> u = new ArrayList<>();
             u.add("401 erro unautorized");
+            u.add(key );
+            u.add(API_KEY);
             return u;
         }
 
