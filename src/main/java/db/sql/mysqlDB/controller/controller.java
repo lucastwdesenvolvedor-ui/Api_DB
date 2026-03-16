@@ -2,10 +2,7 @@ package db.sql.mysqlDB.controller;
 
 import db.sql.mysqlDB.Documentacao.doc;
 import db.sql.mysqlDB.usuario.Usuario;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -80,21 +77,25 @@ public class controller {
         }
 
     }
-    @GetMapping("/post")
-    public ArrayList<String> post(@RequestParam String key, @RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
-        boolean iguals = key.equals(API_KEY);
-        if(!iguals){
-            ArrayList<String> u = new ArrayList<>();
-            u.add("401 erro unautorized");
-            u.add(String.valueOf(key.length()));
-            u.add(String.valueOf(API_KEY.length()));
-            return u;
+    @PostMapping("/post")
+    public ArrayList<String> post(
+            @RequestParam String key,
+            @RequestParam String nome,
+            @RequestParam String email,
+            @RequestParam String senha,
+            @RequestParam String log
+    ) {
+
+        ArrayList<String> resposta = new ArrayList<>();
+
+        if(API_KEY == null || !API_KEY.equals(key)){
+            resposta.add("401 unauthorized");
+            return resposta;
         }
 
         if(!(log.equals("1") || log.equals("0"))){
-            ArrayList<String> err = new ArrayList<>() ;
-            err.add("erro");
-            return err;
+            resposta.add("erro log invalido");
+            return resposta;
         }
         String sql = "INSERT INTO usuarios (nome, email, pass, logado) VALUES (?, ?, ?,?)";
         try (Connection conn = Conn(url, user, pass);
@@ -105,12 +106,11 @@ public class controller {
             ps.setString(3, senha);
             ps.setString(4, log);
             ps.executeUpdate();
-            ArrayList<String> resposta = new ArrayList<>();
+
             resposta.add("True");
             return resposta;
         }
         catch (Exception e){
-            ArrayList<String> resposta = new ArrayList<>();
             resposta.add("Erro ao adicionar usuário: " + e.getMessage());
             return resposta;
         }
