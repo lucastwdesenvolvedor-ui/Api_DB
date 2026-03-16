@@ -50,7 +50,7 @@ public class controller {
         ArrayList<Usuario> u = new ArrayList<>();
         boolean iguals = key.equals(API_KEY);
         if(!key.equals(API_KEY)){
-            Usuario err = new Usuario(401, "unautorized", String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
+            Usuario err = new Usuario(401, String.valueOf(iguals), String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
             u.add(err);
             return u;
         }
