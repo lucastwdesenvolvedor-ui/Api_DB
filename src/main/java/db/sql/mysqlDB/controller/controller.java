@@ -80,9 +80,8 @@ public class controller {
         }
 
     }
-    @GetMapping("post")
+    @GetMapping("/post")
     public ArrayList<String> post(@RequestParam String key, @RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
-
         if(!key.equals(System.getenv("key"))){
             ArrayList<String> u = new ArrayList<>();
             u.add("401 erro unautorized");

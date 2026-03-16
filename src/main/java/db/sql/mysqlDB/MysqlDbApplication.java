@@ -8,6 +8,7 @@ public class MysqlDbApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MysqlDbApplication.class, args);
+        System.out.println("KEY ENV: " + System.getenv("key"));
 	}
 
 }
