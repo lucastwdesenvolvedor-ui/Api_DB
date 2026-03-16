@@ -49,8 +49,8 @@ public class controller {
     public ArrayList<Usuario> get(@RequestParam String key) throws SQLException {
         ArrayList<Usuario> u = new ArrayList<>();
         boolean iguals = key.equals(API_KEY);
-        if(!key.equals(API_KEY)){
-            Usuario err = new Usuario(401, String.valueOf(iguals), String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
+        if(!iguals){
+        Usuario err = new Usuario(401, String.valueOf(iguals), "erro" ,"erro");
             u.add(err);
             return u;
         }
@@ -74,7 +74,7 @@ public class controller {
             }
             return u;
         } catch (SQLException e) {
-            Usuario err = new Usuario(401, String.valueOf(iguals), String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
+            Usuario err = new Usuario(401, String.valueOf(iguals), "erro" ,"erro");
             u.add(err);
             return u;
         }
@@ -82,8 +82,8 @@ public class controller {
     }
     @GetMapping("/post")
     public ArrayList<String> post(@RequestParam String key, @RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
-
-        if(!key.equals(API_KEY)){
+        boolean iguals = key.equals(API_KEY);
+        if(!iguals){
             ArrayList<String> u = new ArrayList<>();
             u.add("401 erro unautorized");
             u.add(String.valueOf(key.length()));
