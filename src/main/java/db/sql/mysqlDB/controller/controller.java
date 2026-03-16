@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 @RestController
-
 public class controller {
     String host = System.getenv("MYSQLHOST");
     String port = System.getenv("MYSQLPORT");
