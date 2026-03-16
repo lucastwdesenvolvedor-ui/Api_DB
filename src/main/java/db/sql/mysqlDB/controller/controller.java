@@ -48,7 +48,7 @@ public class controller {
     @GetMapping("/get")
     public ArrayList<Usuario> get(@RequestParam String key) throws SQLException {
         ArrayList<Usuario> u = new ArrayList<>();
-
+        boolean iguals = key.equals(API_KEY);
         if(!key.equals(API_KEY)){
             Usuario err = new Usuario(401, "unautorized", String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
             u.add(err);
