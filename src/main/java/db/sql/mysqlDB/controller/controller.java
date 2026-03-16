@@ -50,7 +50,7 @@ public class controller {
         ArrayList<Usuario> u = new ArrayList<>();
 
         if(!key.equals(API_KEY)){
-            Usuario err = new Usuario(401, "unautorized", key ,API_KEY );
+            Usuario err = new Usuario(401, "unautorized", String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
             u.add(err);
             return u;
         }
@@ -74,7 +74,7 @@ public class controller {
             }
             return u;
         } catch (SQLException e) {
-            Usuario err = new Usuario(401, "unautorized", key ,API_KEY );
+            Usuario err = new Usuario(401, "unautorized", String.valueOf(key.length()) ,String.valueOf(API_KEY.length()) );
             u.add(err);
             return u;
         }
@@ -86,8 +86,8 @@ public class controller {
         if(!key.equals(API_KEY)){
             ArrayList<String> u = new ArrayList<>();
             u.add("401 erro unautorized");
-            u.add(key );
-            u.add(API_KEY);
+            u.add(String.valueOf(key.length()));
+            u.add(String.valueOf(API_KEY.length()));
             return u;
         }
 
