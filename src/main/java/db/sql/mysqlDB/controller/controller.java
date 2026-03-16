@@ -26,10 +26,10 @@ public class controller {
 
     @RequestMapping("/")
     public ArrayList<doc> bemVindo() {
-        doc post = new doc("/post?" , "Requer parâmetros: nome=, &email=, &senha= , &log=");
+        doc post = new doc("/post?" , "Requer parâmetros: (KEY) nome=, &email=, &senha= , &log=");
         ArrayList<doc> dc = new ArrayList<>();
         dc.add(new doc("Bem Vindo" , "/"));
-        dc.add(new doc("Pegar dados do DB" , "/get"));
+        dc.add(new doc("Pegar dados do DB" , "/get?(KEY)&"));
         dc.add(new doc("Inserir dados no DB" , post +" ||log = logado(1) / não loado(0) "));
         return dc;
     }
@@ -37,7 +37,6 @@ public class controller {
         Connection conn = null;
         try {
             conn = java.sql.DriverManager.getConnection(url, user, password);
-            System.out.println("DATABASE: " + conn.getCatalog());
             return conn;
         } catch (java.sql.SQLException e) {
             System.out.println("Erro ao conectar: " + e.getMessage());
@@ -47,14 +46,21 @@ public class controller {
     }
 
     @GetMapping("/get")
-    public ArrayList<Usuario> get() throws SQLException {
-
+    public ArrayList<Usuario> get(@RequestParam String key) throws SQLException {
         ArrayList<Usuario> u = new ArrayList<>();
 
+        if(!key.equals(System.getenv("key"))){
+            Usuario err = new Usuario(401, "una", "uto","rized" );
+            u.add(err);
+            return u;
+        }
+
+
         Connection conn = Conn(url, user, pass);
-        System.out.println("DATABASE: " + conn.getCatalog());
         if (conn == null) {
-            System.out.println("Conexão falhou");
+            Usuario err = new Usuario(500, "connect", "server","error" );
+            u.add(err);
+            return u;
         }
 
         String sql = "SELECT * FROM usuarios";
@@ -62,25 +68,32 @@ public class controller {
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet res = ps.executeQuery())
         {
-
-
             while (res.next()) {
                 Usuario user = new Usuario(res.getInt("id"), res.getString("nome"), res.getString("email"), res.getString("senha"));
                 u.add(user);
             }
             return u;
         } catch (SQLException e) {
+            Usuario user = new Usuario(401, "una", "uto","rized" );
+
             return u;
         }
 
     }
     @GetMapping("post")
-    public ArrayList<String> post(@RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
-if(!(log.equals("1") || log.equals("0"))){
-    ArrayList<String> err = new ArrayList<>() ;
-    err.add("erro");
-    return err;
-}
+    public ArrayList<String> post(@RequestParam String key, @RequestParam String nome, @RequestParam String email, @RequestParam String senha , @RequestParam String log) throws SQLException {
+
+        if(!key.equals(System.getenv("key"))){
+            ArrayList<String> u = new ArrayList<>();
+            u.add("401 erro unautorized");
+            return u;
+        }
+
+        if(!(log.equals("1") || log.equals("0"))){
+            ArrayList<String> err = new ArrayList<>() ;
+            err.add("erro");
+            return err;
+        }
         String sql = "INSERT INTO usuarios (nome, email, pass, logado) VALUES (?, ?, ?,?)";
         try (Connection conn = Conn(url, user, pass);
              PreparedStatement ps = conn.prepareStatement(sql)
